@@ -1,9 +1,8 @@
-This project contains vagrant boxes based on the Kylo Sandbox to demonstrate various use-cases for Kylo/Nifi integrations.
+This project contains vagrant boxes based on the Kylo Sandbox to demonstrate various use-cases for Kylo/Nifi integrations
 
 ## Prerequisites
 
 [VirtualBox](https://www.virtualbox.org/) and [Vagrant](http://www.vagrantup.com/) (minimum version 1.6)
-Other providers, like VMWare may work, not tested!
 
 ## General information
 
@@ -57,6 +56,8 @@ Streaming tweets from the Twitter Streaming API to Solr and HDFS
 ![](resources/img_twitter_streaming_solr.png)
 
 [Details](twitter_streaming_solr/README.md)
+
+#### Run it!
 
 ```
 $ cd twitter_streaming
