@@ -1,0 +1,33 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "jwoschitz/kylo-hdp-sandbox-0.8.1"
+
+  config.vm.network "forwarded_port", guest: 8983, host: 8983, id: "solr"
+
+  config.vm.provision "file", source: "resources", destination: "resources"
+
+  config.vm.provision "shell", inline: <<-SHELL
+    yum install -y lucidworks-hdpsearch
+    sudo -u hdfs hadoop fs -mkdir /user/solr
+    sudo -u hdfs hadoop fs -chown solr /user/solr
+    sudo chown -R solr:solr /opt/lucidworks-hdpsearch/solr
+
+    sudo -u solr mv /opt/lucidworks-hdpsearch/solr/server/solr-webapp/webapp/banana/app/dashboards/default.json /opt/lucidworks-hdpsearch/solr/server/solr-webapp/webapp/banana/app/dashboards/default.json.orig
+    cp ~/resources/solr/banana_default.json /opt/lucidworks-hdpsearch/solr/server/solr-webapp/webapp/banana/app/dashboards/default.json
+    sudo chown solr:solr /opt/lucidworks-hdpsearch/solr/server/solr-webapp/webapp/banana/app/dashboards/default.json
+
+    sudo -u solr mv /opt/lucidworks-hdpsearch/solr/server/solr/configsets/data_driven_schema_configs/conf/solrconfig.xml /opt/lucidworks-hdpsearch/solr/server/solr/configsets/data_driven_schema_configs/conf/solrconfig.xml.orig
+    cp ~/resources/solr/solrconfig.xml /opt/lucidworks-hdpsearch/solr/server/solr/configsets/data_driven_schema_configs/conf/solrconfig.xml
+    sudo chown solr:solr /opt/lucidworks-hdpsearch/solr/server/solr/configsets/data_driven_schema_configs/conf/solrconfig.xml
+
+    sudo -u solr /opt/lucidworks-hdpsearch/solr/bin/solr start -c -z localhost:2181
+    sudo -u solr /opt/lucidworks-hdpsearch/solr/bin/solr healthcheck -c tweets -z localhost:2181
+    if [[ $? -ne 0 ]]; then sudo -u solr /opt/lucidworks-hdpsearch/solr/bin/solr create -c tweets -d data_driven_schema_configs -s 1 -rf 1; fi;
+
+    yum install -y ntp
+    /bin/systemctl start ntpd.service
+    ntpdate -q pool.ntp.org
+  SHELL
+end
