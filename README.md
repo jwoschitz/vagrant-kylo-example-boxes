@@ -55,7 +55,7 @@ Streaming tweets from the Twitter Streaming API to Solr and HDFS
 
 ![](resources/img_twitter_streaming_solr.png)
 
-[Details](twitter_streaming_solr/README.md)
+[Details](example_twitter_streaming_solr/README.md)
 
 #### Run it!
 
