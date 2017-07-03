@@ -60,7 +60,7 @@ Streaming tweets from the Twitter Streaming API to Solr and HDFS
 #### Run it!
 
 ```
-$ cd twitter_streaming
+$ cd example_twitter_streaming_solr
 $ vagrant up
 ```
 
