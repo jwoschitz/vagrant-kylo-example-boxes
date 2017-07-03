@@ -10,5 +10,5 @@ This example covers streaming http ingestion via the [Twitter hosebird client](h
 
 ## Additional web services
 
-* [Solr](localhost:8983/solr/) | localhost:8983/solr
-* [Banana](localhost:8983/solr/banana/index.html#/dashboard) | localhost:8983/solr/banana/index.html#/dashboard
+* [Solr](http://localhost:8983/solr/) | http://localhost:8983/solr
+* [Banana](http://localhost:8983/solr/banana/index.html#/dashboard) | http://localhost:8983/solr/banana/index.html#/dashboard
