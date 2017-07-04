@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Image recognition service</title>
+    <link rel="stylesheet" href="/static/bootstrap.min.css" />
+
+<style>
+    .container {
+        max-width: 720px
+    }
+    .img-container {
+        vertical-align: middle;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .list-group {
+        margin-bottom: 0;
+    }
+
+    .header {
+        margin-bottom: 20px;
+    }
+</style>
+
+</head>
+<body>
+    <div class="container">
+      <div class="header clearfix">
+        <h3 class="text-muted">Image recognition service</h3>
+      </div>
+
+    {% for item in items %}
+	    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">{{ item.filename }}</h3>
+      </div>
+      <div class="panel-body">
+<div class="img-container">        
+	<img src="/static/images/{{ item.filename }}" />
+</div>
+
+	<ul class="list-group">
+  	{% for record in item.records %}
+{% if record.prob >= 0.9 %}
+        	<li class="list-group-item list-group-item-success">
+{% elif record.prob > 0.5 and record.prob <= 0.7 %}
+        	<li class="list-group-item list-group-item-warning">
+{% elif record.prob <= 0.5 %}
+        	<li class="list-group-item disabled">
+{% else %}
+        	<li class="list-group-item">
+{% endif %}
+<span class="badge">{{ record.prob_pretty }}</span>
+{{ record.text }}
+</li>
+	{% endfor %}
+	</ul>
+	</div>
+	</div>
+    {% endfor %}
+
+    </div>
+</body>
+</html>
