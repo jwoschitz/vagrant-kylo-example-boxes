@@ -49,6 +49,11 @@ Vagrant.configure("2") do |config|
     pip install Flask
     deactivate
 
+    echo "#!/bin/bash" > /opt/image_recognition_service/bin/start_server.sh
+    echo "source /opt/image_recognition_service/web/.venv/bin/activate && python /opt/image_recognition_service/web/app.py &> /opt/image_recognition_service/web/logs/app.log" >> /opt/image_recognition_service/bin/start_server.sh
+
+    nohup /opt/image_recognition_service/bin/start_server.sh &
+
     exit
 
     sudo -u nifi /opt/image_recognition_service/bin/classify_image.sh /tmp/imagenet/cropped_panda.jpg
