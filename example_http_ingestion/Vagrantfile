@@ -41,7 +41,7 @@ Vagrant.configure("2") do |config|
     deactivate
 
     echo "#!/bin/bash" > /opt/image_recognition_service/bin/classify_image.sh
-    echo "source /opt/image_recognition_service/tensorflow/models/.venv/bin/activate && python /opt/image_recognition_service/tensorflow/models/tutorials/image/imagenet/classify_image.py --image_file $1" >> /opt/image_recognition_service/bin/classify_image.sh
+    echo 'source /opt/image_recognition_service/tensorflow/models/.venv/bin/activate && python /opt/image_recognition_service/tensorflow/models/tutorials/image/imagenet/classify_image.py --image_file $1' >> /opt/image_recognition_service/bin/classify_image.sh
     chmod +x /opt/image_recognition_service/bin/classify_image.sh
 
     virtualenv /opt/image_recognition_service/web/.venv
