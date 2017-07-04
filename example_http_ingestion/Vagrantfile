@@ -22,39 +22,32 @@ Vagrant.configure("2") do |config|
 
     mkdir /opt/image_recognition_service/
     mv ~/resources/app /opt/image_recognition_service/web
-
-    chown nifi:nifi -R /opt/image_recognition_service/
-
-    su nifi
+    mkdir /opt/image_recognition_service/web/logs
 
     mkdir -p /opt/image_recognition_service/bin/
     mkdir -p /opt/image_recognition_service/tensorflow/
-    mkdir /opt/image_recognition_service/web/logs
 
     git clone https://github.com/tensorflow/models.git /opt/image_recognition_service/tensorflow/models
 
-    virtualenv /opt/image_recognition_service/tensorflow/models/.venv
-    source /opt/image_recognition_service/tensorflow/models/.venv/bin/activate
-    pip install --upgrade tensorflow
-    # invoke script one time to dynamically pull dependencies
-    python /opt/image_recognition_service/tensorflow/models/tutorials/image/imagenet/classify_image.py
-    deactivate
+    chown nifi:nifi -R /opt/image_recognition_service/
+
+    su - nifi -c "virtualenv /opt/image_recognition_service/tensorflow/models/.venv; source /opt/image_recognition_service/tensorflow/models/.venv/bin/activate; pip install --upgrade tensorflow; python /opt/image_recognition_service/tensorflow/models/tutorials/image/imagenet/classify_image.py; deactivate"
 
     echo "#!/bin/bash" > /opt/image_recognition_service/bin/classify_image.sh
     echo 'source /opt/image_recognition_service/tensorflow/models/.venv/bin/activate && python /opt/image_recognition_service/tensorflow/models/tutorials/image/imagenet/classify_image.py --image_file $1' >> /opt/image_recognition_service/bin/classify_image.sh
+
+    chown nifi:nifi /opt/image_recognition_service/bin/classify_image.sh
     chmod +x /opt/image_recognition_service/bin/classify_image.sh
 
-    virtualenv /opt/image_recognition_service/web/.venv
-    source /opt/image_recognition_service/web/.venv/bin/activate
-    pip install Flask
-    deactivate
+    su - nifi -c "virtualenv /opt/image_recognition_service/web/.venv; source /opt/image_recognition_service/web/.venv/bin/activate; pip install Flask; deactivate"
 
     echo "#!/bin/bash" > /opt/image_recognition_service/bin/start_server.sh
     echo "source /opt/image_recognition_service/web/.venv/bin/activate && python /opt/image_recognition_service/web/app.py &> /opt/image_recognition_service/web/logs/app.log" >> /opt/image_recognition_service/bin/start_server.sh
 
-    nohup /opt/image_recognition_service/bin/start_server.sh &
+    chown nifi:nifi /opt/image_recognition_service/bin/start_server.sh
+    chmod +x /opt/image_recognition_service/bin/start_server.sh
 
-    exit
+    sudo -u nifi nohup /opt/image_recognition_service/bin/start_server.sh &
 
     sudo -u nifi /opt/image_recognition_service/bin/classify_image.sh /tmp/imagenet/cropped_panda.jpg
   SHELL
