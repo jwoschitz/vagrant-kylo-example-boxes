@@ -64,4 +64,17 @@ $ cd example_twitter_streaming_solr
 $ vagrant up
 ```
 
+### HTTP server and image recognition pipeline
 
+A http server in a NiFi processor will propagate received images to a Tensorflow model which classifies the image and makes the results available via a web application 
+
+![](resources/img_http_server_and_pipeline.png)
+
+[Details](example_http_server_and_pipeline/README.md)
+
+#### Run it!
+
+```
+$ cd example_http_server_and_pipeline
+$ vagrant up
+```
