@@ -50,5 +50,12 @@ Vagrant.configure("2") do |config|
     sudo -u nifi nohup /opt/image_recognition_service/bin/start_server.sh &
 
     sudo -u nifi /opt/image_recognition_service/bin/classify_image.sh /tmp/imagenet/cropped_panda.jpg
+
+    echo "#!/bin/bash" > /opt/image_recognition_service/bin/clear_data.sh
+    echo "rm /opt/image_recognition_service/web/classification/*" >> /opt/image_recognition_service/bin/clear_data.sh
+  SHELL
+
+  config.vm.provision "shell", :run => 'always', inline: <<-SHELL
+    sudo -u nifi nohup /opt/image_recognition_service/bin/start_server.sh &
   SHELL
 end
