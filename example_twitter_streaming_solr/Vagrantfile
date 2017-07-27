@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "jwoschitz/kylo-hdp-sandbox-0.8.1"
+  config.vm.box = "jwoschitz/kylo-hdp-sandbox-0.8.2"
 
   config.vm.network "forwarded_port", guest: 8983, host: 8983, id: "solr"
 

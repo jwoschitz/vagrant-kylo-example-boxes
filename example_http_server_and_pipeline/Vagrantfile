@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "jwoschitz/kylo-hdp-sandbox-0.8.1"
+  config.vm.box = "jwoschitz/kylo-hdp-sandbox-0.8.2"
 
   # flexible range to be able to expose several servers, primary use case relies on 9123
   for p in 9123..9133
